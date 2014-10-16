@@ -23,8 +23,9 @@ makeCacheMatrix <- function(x = matrix()) {
 }
 
 
-## The function below takes cacheMatrix items and caclulates the invert matrixes
-## If the calculation has alreadz been performed, the function returns the invert
+## The function below takes cacheMatrix items and caclulates the invert matrix for the matrix it holds in x.
+## If the calculation has already been performed, the function simply returns the inverted matrix.
+## Otherwise it calculates the invert and stores it for future re-use.
 cacheSolve <- function(x, ...) {
   m <- x$getInvert()
   if(!is.null(m)) {
@@ -38,9 +39,9 @@ cacheSolve <- function(x, ...) {
   ## Return a matrix that is the inverse of 'x'
 }
 
-# This function iterate through the cache to find if the  matrix passed in.
-# If the matrix is not present, the function creates the it and add it to the cache.
-# Otherwise it returns it
+# This function iterates through the cache items to find if the matrix passed in exists.
+# If the matrix is not present, the function creates a cache item for it and add it to the cache.
+# Otherwise it returns it.
 getCacheItem<-function(x=matrix()){
   m<-NULL
   for(i in cache){
@@ -64,4 +65,27 @@ getCacheItem<-function(x=matrix()){
 InvertMatrix<-function(x=matrix()){
   i<-getCacheItem(x)
   cacheSolve(i)
+}
+
+#Test function
+examples<-function(){
+  ## Examples
+  x<-matrix(c(1,2,3,4),nrow=2,ncol=2,byrow = TRUE)
+  y<-matrix(c(1,2,3,4,3,2,1,0,0),nrow=3,ncol=3,byrow = TRUE)
+  message("First call to invert x:")
+  a<-InvertMatrix(x)
+  message("Second call to invert x:")
+  b<-InvertMatrix(x)
+  print(a)
+  print(identical(a,b))
+  
+  ###################################
+  
+  message("First call to invert y:")
+  a<-InvertMatrix(y)
+  message("Second call to invert y:")
+  b<-InvertMatrix(y)
+  print(a)
+  print(identical(a,b))
+  
 }
